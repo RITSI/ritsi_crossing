@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+body {
+    /* Location of the image */
+    background-image: url(../images/fondo.jpg);
+
+    /* Image is centered vertically and horizontally at all times */
+    background-position: center center;
+
+    /* Image doesn't repeat */
+    background-repeat: no-repeat;
+
+    /* Makes the image fixed in the viewport so that it doesn't move when
+       the content height is greater than the image height */
+    background-attachment: fixed;
+
+    /* This is what makes the background image rescale based on its container's size */
+    background-size: cover;
+}
+
+#title{
+    text-align: center;
+    color:white;
+    font-size:30px;
+    text-transform: uppercase;
+    margin-top: 100px;
+}
+.hover-table-layout {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    max-width:800px;
+    margin:0 auto;
+}
+.listing-item {
+    width:100%;
+    margin-bottom:20px;
+    background: #fff;
+    border-radius:10px;
+    z-index:0;
+    cursor:pointer;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.10);
+    -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.10);
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.10);
+
+}
+.listing-item:hover,  .listing-item.active{
+    -webkit-transform: scale(1.03);
+    -moz-transform: scale(1.03);
+    transform: scale(1.03);
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    z-index:2;
+
+}
+.listing-item .listing{
+    padding:20px;
+    position:relative;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 100%;
+}
+.listing-item .listing:before{
+    content:"";
+    position:absolute;
+    top:-15px;
+    left:-o-calc(50% - 20px);
+    left:-moz-calc(50% - 20px);
+    left:-webkit-calc(50% - 20px);
+    left:calc(50% - 20px);
+    border-bottom:20px solid #fff;
+    border-left:20px solid transparent;
+    border-right:20px solid transparent;
+}
+figure.image img {
+    width:100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+figure.image {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+figure.image figcaption {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    bottom: 4px;
+    background: rgba(0,0,0,0.6);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+}
+figcaption .caption{
+    position:relative;
+    top:50%;
+    -moz-transform:translateY(-50%);
+    -webkit-transform:translateY(-50%);
+    transform:translateY(-50%);
+
+}
+figcaption h1{
+    color:white;
+    font-weight:bold;
+    font-size:30px;
+    margin-top: 30px;
+    margin-bottom:-15px
+}
+figcaption p {
+    color:white;
+    font-size:25px;
+	margin-top: 10px;
+}
+figcaption .bayas {
+	width: 30px!important;
+	float: left;
+}
+
+.listing h4 {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: -15px;
+}
+.listing h4:not(:last-child){
+    border-bottom: 1px solid #ccc;
+}
+.listing h5 {
+    margin-top: -2px;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.listing-item:hover figure.image figcaption.Cereza{
+    background: rgba(234, 91, 70, 0.9);
+}
+.listing-item:hover figure.image figcaption.Manzana{
+	background: rgba(228, 78, 79, 0.9);
+}
+.listing-item:hover figure.image figcaption.Melocotón{
+	background: rgba(245, 157, 110, 0.9);
+}
+.listing-item:hover figure.image figcaption.Naranja{
+	background: rgba(237, 126, 45, 0.9);
+}
+.listing-item:hover figure.image figcaption.Pera{
+	background: rgba(141, 209, 40, 0.9);
+}
+
+@media only screen and (min-width:1024px){
+    .hover-table-layout{
+        padding: 30px;
+    }
+}
+
+@media only screen and (min-width:992px){
+	.listing h5 {
+		font-size: 14px;
+	}
+}
+@media only screen and (max-width:991px){
+	.listing h4 {
+		font-size: 1.5rem;
+	}
+	figcaption h1 {
+		font-size:60px;
+	}
+	figcaption p {
+		font-size:50px;
+	}
+}
