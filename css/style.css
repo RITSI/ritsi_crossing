@@ -2,7 +2,7 @@
 
 body {
     /* Location of the image */
-    background-image: url(../images/fondo.jpg);
+    background-image: url(/images/fondo.jpg);
 
     /* Image is centered vertically and horizontally at all times */
     background-position: center center;
