@@ -4,8 +4,10 @@
 	if (isset($_POST['teamId']) 
 		&& is_numeric($_POST['teamId'])
 		&& isset($_POST['newPoints'])
-		&& is_numeric($_POST['newPoints'])) {
-		updatePoints(intval($_POST['teamId']), intval($_POST['newPoints']));
+		&& is_numeric($_POST['newPoints'])
+		&& isset($_POST['memberId'])
+		&& is_numeric($_POST['memberId'])) {
+		updatePoints(intval($_POST['teamId']), intval($_POST['newPoints']), intval($_POST['memberId']));
 	}
 	$teams = fetch_teams();
 ?>
@@ -69,6 +71,12 @@
 							<form action="/management/" method="POST">
 								<div class="form-group">
 									<label style="font-size:px14;" for="email">Nueva puntuación(+/-):</label>
+									<select name="memberId" id="memberId">
+										<option>--- Seleccione un asistente ---</option>
+										<?php foreach ($team->members as $member) { ?>
+										<option value="<?= $member->id ?>"><?= $member->name ?> <?= $member->lastname ?></option>
+										<?php } ?>
+									</select>
 									<input style="max-height:30px;font-size:14px;" type="number" class="form-control" name="newPoints">
 									<input type="hidden" class="form-control" name="teamId" value="<?= $team->id ?>">
 								</div>

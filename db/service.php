@@ -54,21 +54,27 @@ class Member {
 }
 
 function open_read_database() {
-	$idDB = @new mysqli("localhost", "rc_web", "&UG*C7F(+c:s#qruG&", "ritsi_crossing");
+	$auth_file = file_get_contents("/var/www/ritsi_crossing/db/auth.json");
+	$auth = json_decode($auth_file);
+	$idDB = @new mysqli("localhost", $auth->{"read"}->{"user"}, $auth->{"read"}->{"pass"}, "ritsi_crossing");
+	
 	if ( mysqli_connect_errno() ) {
 		die("No puedo conectar con el gestor MySQL" . mysqli_connect_error());
 	}
-	$idDB->set_charset("utf8");
+	$idDB->set_charset("utf8mb4");
 	
 	return $idDB;
 }
 
 function open_write_database() {
-	$idDB = @new mysqli("localhost", "rc_management", "5(Fr,{R7E+E{X[z&-D", "ritsi_crossing");
+	$auth_file = file_get_contents("/var/www/ritsi_crossing/db/auth.json");
+	$auth = json_decode($auth_file);
+	$idDB = @new mysqli("localhost", $auth->{"write"}->{"user"}, $auth->{"write"}->{"pass"}, "ritsi_crossing");
+	
 	if ( mysqli_connect_errno() ) {
 		die("No puedo conectar con el gestor MySQL" . mysqli_connect_error());
 	}
-	$idDB->set_charset("utf8");
+	$idDB->set_charset("utf8mb4");
 	
 	return $idDB;
 }
@@ -138,25 +144,14 @@ function fetch_route($routeId) {
 	return $route;
 }
 
-function updatePoints($teamId, $newPoints) {
+function updatePoints($teamId, $newPoints, $memberId) {
 	$db = open_write_database();
-	$query = " SELECT points FROM teams WHERE id = ?";
+	$query = "UPDATE members SET points = points + ? WHERE id = ? AND team = ?";
+	
 	$stmt = $db->prepare($query);
-	$stmt->bind_param('i', $teamId);
-	$success = $stmt->execute();
-
-	if($success) {
-		$result = $stmt->get_result();
-		$row = $result->fetch_array(MYSQLI_ASSOC);
-		$teamPoints = $row['points'];
-		$stmt->close();
-
-		$query = "UPDATE teams SET points = ? WHERE id = ?";
-		$stmt = $db->prepare($query);
-		$pointsToSave = $teamPoints + $newPoints;
-		$stmt->bind_param('ii', $pointsToSave, $teamId);
-		$stmt->execute();
-	}
+	$pointsToSave = $teamPoints + $newPoints;
+	$stmt->bind_param('iii', $newPoints, $memberId, $teamId);
+	$stmt->execute();
 
 	close_database($db);
 }

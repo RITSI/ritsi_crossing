@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `teams`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `teams` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '0',
@@ -29,7 +29,7 @@ CREATE TABLE `teams` (
   `points` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `teams_id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,14 +38,14 @@ CREATE TABLE `teams` (
 
 DROP TABLE IF EXISTS `routes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `routes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '0',
   `points` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `routes_id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,7 +54,7 @@ CREATE TABLE `routes` (
 
 DROP TABLE IF EXISTS `members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `members` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '0',
@@ -68,8 +68,40 @@ CREATE TABLE `members` (
   CONSTRAINT `FK_members_teams` FOREIGN KEY (`team`) REFERENCES `teams` (`id`),
   KEY `FK_members_routes` (`route`),
   CONSTRAINT `FK_members_routes` FOREIGN KEY (`route`) REFERENCES `routes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `points_log`
+--
+
+DROP TABLE IF EXISTS `points_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `points_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member` int(11) NOT NULL,
+  `points` int(11) NOT NULL,
+  `admin` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `points_log_id_UNIQUE` (`id`),
+  KEY `FK_points_log_members_id` (`member`),
+  CONSTRAINT `FK_points_log_members` FOREIGN KEY (`member`) REFERENCES `members` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- After update trigger for table `members`
+--
+DELIMITER $$
+CREATE TRIGGER `ritsi_crossing`.`members_AFTER_UPDATE` AFTER UPDATE ON `members` FOR EACH ROW
+BEGIN
+	INSERT INTO points_log (member, points, admin) VALUES (NEW.id, NEW.points-OLD.points, 1);
+    UPDATE teams SET points = points+(NEW.points-OLD.points) WHERE id = NEW.team;
+    UPDATE routes SET points = points+(NEW.points-OLD.points) WHERE id = NEW.route;
+END
+$$
+DELIMITER ;
 
 --
 -- Dumping data for table `teams`
