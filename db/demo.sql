@@ -100,8 +100,8 @@ USE `ritsi_crossing`$$
 CREATE TRIGGER `ritsi_crossing`.`points_log_AFTER_INSERT` AFTER INSERT ON `points_log` FOR EACH ROW
 BEGIN
 	UPDATE members SET points = points + NEW.points WHERE id = NEW.member;
-    UPDATE teams SET points = points+NEW.points WHERE id = (SELECT team FROM members WHERE id = NEW.member);
-    UPDATE routes SET points = points+NEW.points WHERE id = (SELECT route FROM members WHERE id = NEW.member);
+    UPDATE teams SET points = points + NEW.points WHERE id = (SELECT team FROM members WHERE id = NEW.member);
+    UPDATE routes SET points = points + NEW.points WHERE id = (SELECT route FROM members WHERE id = NEW.member);
 END$$
 DELIMITER ;
 

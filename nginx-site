@@ -24,6 +24,13 @@ server {
 		return 404;
 	}
 
+	location ~\.(sql|json) {
+			deny all;
+			access_log off;
+			log_not_found off;
+			return 404;
+	}
+	
 	location ~*/management/index.php {
 		auth_basic "Management area";
 		auth_basic_user_file /var/www/ritsi_crossing/management/.htpasswd;
