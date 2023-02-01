@@ -144,13 +144,13 @@ function fetch_route($routeId) {
 	return $route;
 }
 
-function updatePoints($teamId, $newPoints, $memberId) {
+function updatePoints($teamId, $newPoints, $memberId, $username) {
 	$db = open_write_database();
-	$query = "UPDATE members SET points = points + ? WHERE id = ? AND team = ?";
+	$query = "INSERT INTO points_log (member, points, manager, updated) VALUES (?, ?, ?, NOW());";
 	
 	$stmt = $db->prepare($query);
 	$pointsToSave = $teamPoints + $newPoints;
-	$stmt->bind_param('iii', $newPoints, $memberId, $teamId);
+	$stmt->bind_param('iis', $memberId, $newPoints, $username);
 	$stmt->execute();
 
 	close_database($db);

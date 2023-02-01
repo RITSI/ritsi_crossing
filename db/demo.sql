@@ -82,7 +82,8 @@ CREATE TABLE `points_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `member` int(11) NOT NULL,
   `points` int(11) NOT NULL,
-  `admin` varchar(50) NOT NULL,
+  `manager` varchar(50) NOT NULL,
+  `updated` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `points_log_id_UNIQUE` (`id`),
   KEY `FK_points_log_members_id` (`member`),
@@ -91,16 +92,17 @@ CREATE TABLE `points_log` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- After update trigger for table `members`
+-- After insert trigger for table `points_log`
 --
+DROP TRIGGER IF EXISTS `ritsi_crossing`.`points_log_AFTER_INSERT`;
 DELIMITER $$
-CREATE TRIGGER `ritsi_crossing`.`members_AFTER_UPDATE` AFTER UPDATE ON `members` FOR EACH ROW
+USE `ritsi_crossing`$$
+CREATE TRIGGER `ritsi_crossing`.`points_log_AFTER_INSERT` AFTER INSERT ON `points_log` FOR EACH ROW
 BEGIN
-	INSERT INTO points_log (member, points, admin) VALUES (NEW.id, NEW.points-OLD.points, 1);
-    UPDATE teams SET points = points+(NEW.points-OLD.points) WHERE id = NEW.team;
-    UPDATE routes SET points = points+(NEW.points-OLD.points) WHERE id = NEW.route;
-END
-$$
+	UPDATE members SET points = points + NEW.points WHERE id = NEW.member;
+    UPDATE teams SET points = points+NEW.points WHERE id = (SELECT team FROM members WHERE id = NEW.member);
+    UPDATE routes SET points = points+NEW.points WHERE id = (SELECT route FROM members WHERE id = NEW.member);
+END$$
 DELIMITER ;
 
 --

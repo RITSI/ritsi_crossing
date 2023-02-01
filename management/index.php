@@ -7,7 +7,7 @@
 		&& is_numeric($_POST['newPoints'])
 		&& isset($_POST['memberId'])
 		&& is_numeric($_POST['memberId'])) {
-		updatePoints(intval($_POST['teamId']), intval($_POST['newPoints']), intval($_POST['memberId']));
+		updatePoints(intval($_POST['teamId']), intval($_POST['newPoints']), intval($_POST['memberId']), $_SERVER['PHP_AUTH_USER']);
 	}
 	$teams = fetch_teams();
 ?>
