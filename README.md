@@ -1,3 +1,5 @@
+**DISCLAIMER:** There are pending code improvements and corrections, as pending deployment documentation.
+
 To deploy and test:
 1. Clone the project in your server
 2. Move the folder to the location where Nginx server will be listening
